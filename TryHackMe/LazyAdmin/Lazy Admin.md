@@ -46,4 +46,42 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 10.06 seconds
 ```
+
+#### Wfuzz - Enumeración de directorios
+
 Como podemos observar existe un servicio http por el puerto 80 al que podemos acceder con la URL `http://10.10.109.87:80`en nuestro navegador:
+
+![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/index.png)
+
+Accedemos a la página de defecto del servidor Apache2.
+
+En este punto comencé a buscar archivos `robots.txt`, `login.php`o directorios como `/uploads` que son bastante counes en los CTFs, pero no obtuve resultados.
+
+Para la enumeración de directorios utilizaremos wfuzz como herramienta de fuzzeo. Las wordlists que empleé fueron dos, con la primera (`/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt`) no obtuve resultados ya sin especificar extensión o con las extensiones `php`y `html`. Con la segunda wordlist (`/usr/share/wfuzz/wordlist/general/common.txt`) si que salieron resultados:
+
+```console
+kimera@vault:~/Machines/THM/LazyAdmin/web$ wfuzz -c -z file,/usr/share/wfuzz/wordlist/general/common.txt --hc=404,302 http://10.10.109.87/FUZZ
+
+********************************************************
+* Wfuzz 2.4.5 - The Web Fuzzer                         *
+********************************************************
+
+Target: http://10.10.98.202/FUZZ
+Total requests: 949
+
+===================================================================
+ID           Response   Lines    Word     Chars       Payload                                                                                                                                                                   
+===================================================================
+
+000000204:   301        9 L      28 W     314 Ch      "content"                                                                                                                                                                 
+
+Total time: 15.05663
+Processed Requests: 949
+Filtered Requests: 948
+Requests/sec.: 63.02869
+```
+
+
+
+
+
