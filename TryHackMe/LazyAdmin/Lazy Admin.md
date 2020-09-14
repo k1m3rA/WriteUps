@@ -110,4 +110,4 @@ Requests/sec.: 43.84869
 
 Primero revisamos la URL `http://10.10.109.87/content`, donde podemos deducir que se utiliza el gestor de contenido SweetRice:
 
-
+![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/sweetrice.png)
