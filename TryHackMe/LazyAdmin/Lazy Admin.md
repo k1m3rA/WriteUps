@@ -108,6 +108,6 @@ Requests/sec.: 43.84869
 ```
 
 
-
+Primero revisamos la URL `http://10.10.109.87/content`, donde podemos deducir que se utiliza el gestor de contenido SweetRice:
 
 
