@@ -111,3 +111,14 @@ Requests/sec.: 43.84869
 Primero revisamos la URL `http://10.10.109.87/content`, donde podemos deducir que se utiliza el gestor de contenido SweetRice:
 
 ![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/sweetrice.png)
+
+Al inspeccionar la página podemos encontrar un link de un archivo escrito en JavaScript (`.js`) debajo del tag de <title>.
+Si nos fijamos en la ubicación del archivo podemos encontrarnos con el directorio que previamente habiamos fuzzeado.
+  
+Revisando el archivo `SweetRice.js` se ve una versión desde el que se creó el script (`0.5.4`). Con la idea de encontrar credenciales, con el atajo `Ctrl+F`filtramos la palabra `pass` con la que se obtienen dos resultados, sin embargo no hay ninguna contraseña o usuario.
+
+Si revisas cuidadosamente los demás scripts alojados en `http://10.10.109.87/content/js`puedes sacar también el directorio de `/images`.
+Revisando los archivos en `/images`no encontramos nada que nos revele datos que puedan vulnerar la máquina.
+
+
+
