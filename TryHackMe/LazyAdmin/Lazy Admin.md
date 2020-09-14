@@ -81,6 +81,32 @@ Filtered Requests: 948
 Requests/sec.: 63.02869
 ```
 
+Si fuzzeamos de nuevo este directorio podemos acceder a otros archivos ocultos:
+
+```console
+kimera@vault:~/Machines/THM/LazyAdmin/web$ wfuzz -c -z file,/usr/share/wfuzz/wordlist/general/common.txt --hc=404,302 http://10.10.98.202/content/FUZZ
+
+********************************************************
+* Wfuzz 2.4.5 - The Web Fuzzer                         *
+********************************************************
+
+Target: http://10.10.98.202/content/FUZZ
+Total requests: 949
+
+===================================================================
+ID           Response   Lines    Word     Chars       Payload                                                                                                                                                                   
+===================================================================
+
+000000412:   301        9 L      28 W     321 Ch      "images"                                                                                                                                                                  
+000000416:   301        9 L      28 W     318 Ch      "inc"                                                                                                                                                                     
+000000454:   301        9 L      28 W     317 Ch      "js"                                                                                                                                                                      
+
+Total time: 21.64260
+Processed Requests: 949
+Filtered Requests: 946
+Requests/sec.: 43.84869
+```
+
 
 
 
