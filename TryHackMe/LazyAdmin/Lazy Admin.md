@@ -131,9 +131,16 @@ También podemos encontrar una carpeta con nombre `mysql_backup`, dentro de esa 
 
 ![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/mysql.png)
 
+Con el comando `strings`listamos todos los caracteres imprimibles del archivo:
+
 ```console
 kimera@vault:~/Machines/THM/LazyAdmin/web$ strings mysql_bakup_20191129023059-1.5.1.sql 
 ```
 
-![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/creds.png)
+![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/creds.png) 
+
+Si buscamos entre los resultados podemos encontrar una línea con el nombre de usuario de la cuenta admin (`manager`) y un hash md5 de la contraseña (`42f749ade7f9e195bf475f37a44cafcb`). El hash lo podemos decodificar [aquí](https://crackstation.net/).
+
+![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/hash.png)
+
 
