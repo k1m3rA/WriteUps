@@ -135,3 +135,5 @@ También podemos encontrar una carpeta con nombre `mysql_backup`, dentro de esa 
 kimera@vault:~/Machines/THM/LazyAdmin/web$ strings mysql_bakup_20191129023059-1.5.1.sql 
 ```
 
+![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/creds.png)
+
