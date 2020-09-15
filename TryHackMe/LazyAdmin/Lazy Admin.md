@@ -5,7 +5,7 @@
 
 ## Enumeración
 
-#### Nmap - Enumeración de puertos
+#### :ship: Nmap - Enumeración de puertos
 Para la enumeración de puertos de la máquina utilizaremos nmap, una herramienta que nos permite scanear los puertos abiertos y los servicios que corren en una dirección IP. Comenzaremos con enumerar los primeros 1000 puertos con el siguiente comando:
 
 ```console
@@ -47,7 +47,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 10.06 seconds
 ```
 
-#### Wfuzz - Enumeración de directorios
+#### :page_with_curl: Wfuzz - Enumeración de directorios
 
 Como podemos observar existe un servicio http por el puerto 80 al que podemos acceder con la URL `http://10.10.109.87:80`en nuestro navegador:
 
