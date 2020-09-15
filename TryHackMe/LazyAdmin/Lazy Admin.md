@@ -118,7 +118,9 @@ Si nos fijamos en la ubicación del archivo podemos encontrarnos con el director
 Revisando el archivo `SweetRice.js` se ve una versión desde el que se creó el script (`0.5.4`). Con la idea de encontrar credenciales, con el atajo `Ctrl+F`filtramos la palabra `pass` con la que se obtienen dos resultados, sin embargo no hay ninguna contraseña o usuario.
 
 Si revisas cuidadosamente los demás scripts alojados en `http://10.10.109.87/content/js`puedes sacar también el directorio de `/images`.
-Revisando los archivos en `/images`no encontramos nada que nos revele datos que puedan vulnerar la máquina.
+Mirando los archivos en `/images`no encontramos nada que nos revele datos que puedan vulnerar la máquina.
+
+Por último, nos faltaría revisar el directorio `/inc` en el que encontremos diferentes carpetas y archivos en formato `.php`:
 
 
 
