@@ -127,4 +127,11 @@ Por último, nos faltaría revisar el directorio `/inc` en el que encontremos di
 
 Si accedemos al archivo de texto con nombre `lastest.txt`podemos listar una versión, que como dice el nombre sería la más reciente de uno de los servicios que corre la página web. El servicio que habíamos encontrado previamente es el CMS SweetRice. Lo cual nos servirá mas adelante para buscar exploits relacionados con esta versión (`1.5.1`).
 
-También podemos encontrar una carpeta con nombre `mysql_backup`
+También podemos encontrar una carpeta con nombre `mysql_backup`, dentro de esa carpeta podemos descargar la copia de seguridad de una base de datos:
+
+![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/mysql.png)
+
+```console
+kimera@vault:~/Machines/THM/LazyAdmin/web$ strings mysql_bakup_20191129023059-1.5.1.sql 
+```
+
