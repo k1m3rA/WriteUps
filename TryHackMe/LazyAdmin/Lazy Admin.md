@@ -216,6 +216,10 @@ Y entramos en la URL donde se aloja el archivo que recién subimos: `http://10.1
 
 #### :collision:Método - 2
 
+Para este segundo método utilizaremos el primer enlace de la búsqueda que hicimos previamente. Este nos proprciona un exploit escrito en Python, el cual, cuando lo ejectutemos con el comando `python nombreexploit.py`, nos pedirá el host que en nuestro caso es `10.10.109.87/content`que nos lo pedirá entre comillas, así como el resto de parámetros necesarios: usuario, contraseña, nombre del exploit.
+
+
+
 sudo /usr/bin/perl /home/itguy/backup.pl
 
 
