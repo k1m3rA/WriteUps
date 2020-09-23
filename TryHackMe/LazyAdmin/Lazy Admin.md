@@ -220,7 +220,7 @@ Para este segundo método utilizaremos el primer enlace de la búsqueda que hici
 
 Ponemos en escucha el puerto con el que configuramos la reverse shell y visitamos la URL que nos proporciona el output del exploit.
 
-### Escalación de privilegios
+## Escalación de privilegios
 
 #### :triangular_flag_on_post:Primera Flag
 
