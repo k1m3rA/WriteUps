@@ -220,15 +220,17 @@ Para este segundo método utilizaremos el primer enlace de la búsqueda que hici
 
 Ponemos en escucha el puerto con el que configuramos la reverse shell y visitamos la URL que nos proporciona el output del exploit.
 
+### Escalación de privilegios
+
 #### :triangular_flag_on_post:Primera Flag
 
-Con el comando `id`podemos ver que somos el usuario `www-data`. Para la escalación de privilegios procedemos con alguna enumeracón básica de linux. Con el comando `sudo -l`podemos ver que comandos podemos correr con permisos de root.
 
 Nos dirigimos al directorio home para ver a que carpeta de directorios de usuario tenemos acceso y vemos que la de itguy es accesible. Dentro de este usuario encontramos la primera flag:
 
 ![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/user.png)
 
-#### :warning:Escalación de privilegios
+Con el comando `id`podemos ver que somos el usuario `www-data`. Para la escalación de privilegios procedemos con alguna enumeracón básica de linux. Con el comando `sudo -l`podemos ver que comandos podemos correr con permisos de root.
+
 
 ```console
 $ sudo -l
