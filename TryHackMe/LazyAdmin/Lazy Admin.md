@@ -220,8 +220,32 @@ Para este segundo método utilizaremos el primer enlace de la búsqueda que hici
 
 Ponemos en escucha el puerto con el que configuramos la reverse shell y visitamos la URL que nos proporciona el output del exploit.
 
-#### Escalación de provolegios
+#### Primera Flag
 
+Con el comando `id`podemos ver que somos el usuario `www-data`. Para la escalación de privilegios procedemos con alguna enumeracón básica de linux. Con el comando `sudo -l`podemos ver que comandos podemos correr con permisos de root.
+
+Nos dirigimos al directorio home para ver a que carpeta de directorios de usuario tenemos acceso y vemos que la de itguy es accesible. Dentro de este usuario encontramos la primera flag:
+
+#### Escalación de privilegios
+
+```console
+$ sudo -l
+
+Matching Defaults entries for www-data on THM-Chal:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User www-data may run the following commands on THM-Chal:
+    (ALL) NOPASSWD: /usr/bin/perl /home/itguy/backup.pl
+```
+
+Como podemos ver, el usuario www-data puede ejecutar un archivo escrito en perl. Este archivo lo podemos modificar para obtener una nueva reverse shell pero esta vez con permisos de root. Para previsualizar el contenido de este archivo podemos hacer un cat:
+
+```console
+$ cat /home/itguy/backup.pl
+#!/usr/bin/perl
+
+system("sh", "/etc/copy.sh");
+```
 
 sudo /usr/bin/perl /home/itguy/backup.pl
 
