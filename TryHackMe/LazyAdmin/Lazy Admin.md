@@ -54,7 +54,7 @@ Accedemos a la página de defecto del servidor Apache2.
 
 En este punto comencé a buscar archivos `robots.txt`, `login.php`o directorios como `/uploads` que son bastante comunes en los CTFs, pero no obtuve resultados.
 
-Para la enumeración de directorios utilizaremos wfuzz como herramienta de fuzzeo. Las wordlists que empleé fueron dos, con la primera (`/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt`) no obtuve resultados ya sin especificar extensión o con las extensiones `php`y `html`. Con la segunda wordlist (`/usr/share/wfuzz/wordlist/general/common.txt`) si que salieron resultados:
+Para la enumeración de directorios utilizaremos wfuzz como herramienta de fuzzeo. Las wordlists que empleé fueron dos, con la primera (`/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt`) no obtuve resultados ya sin especificar extensión o con las extensiones `php` y `html`. Con la segunda wordlist (`/usr/share/wfuzz/wordlist/general/common.txt`) si que salieron resultados:
 
 ```console
 kimera@vault:~/Machines/THM/LazyAdmin/web$ wfuzz -c -z file,/usr/share/wfuzz/wordlist/general/common.txt --hc=404,302 http://10.10.109.87/FUZZ
